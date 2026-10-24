@@ -1,0 +1,10 @@
+Contributing to the Oyabun Project.
+
+To contribute, you have to:
+
+Fork the repository
+Do your changes on a branch (e.g. dev/mycoolname/feature) 
+Test the changes
+Submit a pull request.
+
+I'm widely accepting commits to the Oyabun project so users can use this framework to create game engines or games on top of it.
