@@ -11,6 +11,9 @@ using namespace Microsoft::WRL;
 
 namespace Oyabun
 {
+	class RenderResource; //forward decl
+	struct ResourceDesc;
+
 	class RenderDevice
 	{
 	public:
@@ -25,14 +28,10 @@ namespace Oyabun
 		void Shutdown();
 
 		void WaitForGPU();
-	//Note: Creating the swap chain
-	//which is done on a separate class
-	//requires getting m_pFactory.
-	//To avoid leakage, we could use
-	//a handle via void*
-	//or an unsigned integer.
+
+		RenderResource* CreateResource(ResourceDesc* pDesc);
+
 #if OYABUN_USE_DIRECT3D
-	void* GetFactory() const { return m_pFactory.Get(); }
 	void FetchWindow(void* window) { m_hWnd = window; }
 #endif
 	private:

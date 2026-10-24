@@ -13,17 +13,32 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\D3D12MA">
+      <UniqueIdentifier>{a15340c2-6f50-4a09-9774-cfbf77821834}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\D3D12MA">
+      <UniqueIdentifier>{aaa2ff25-9f03-466d-a22c-80ef117ab0ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\RenderDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\RenderBuffer.h">
+    <ClInclude Include="..\include\RenderResource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ThirdParty\D3D12MA\include\D3D12MemAlloc.h">
+      <Filter>Header Files\D3D12MA</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderDeviceD3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThirdParty\D3D12MA\src\D3D12MemAlloc.cpp">
+      <Filter>Source Files\D3D12MA</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderResourceD3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

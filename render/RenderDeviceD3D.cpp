@@ -18,6 +18,15 @@ namespace Oyabun
 	{
 		DWORD dwFlags = 0;
 #if _DEBUG
+		ComPtr<ID3D12Debug6> debugCtrl;
+
+		if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugCtrl))))
+		{
+			debugCtrl->EnableDebugLayer();
+			debugCtrl->SetEnableGPUBasedValidation(TRUE); //Set to false whenever you need to run a sample as quick as possible, or use Release mode.
+			//GPU-driven validation is enabled by default to identify errors that the D3D12 debug layer cannot easily distinguish.
+			
+		}
 		dwFlags = DXGI_CREATE_FACTORY_DEBUG;
 #endif
 		HRESULT hr = CreateDXGIFactory2(dwFlags, IID_PPV_ARGS(&m_pFactory));
@@ -37,6 +46,15 @@ namespace Oyabun
 		hr = D3D12CreateDevice(m_pAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_pDevice));
 
 		if (FAILED(hr)) return false; //Log error and return false.
+
+		//Never let errors fall silently, break into them too.
+#if _DEBUG
+		ComPtr<ID3D12InfoQueue> infoQueue;
+		if (SUCCEEDED(m_pDevice->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, TRUE);
+			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, TRUE);
+		}
+#endif
 
 		hr = m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence));
 

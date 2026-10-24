@@ -26,7 +26,7 @@ git submodule update --init --recursive
 
 
 
-Open `code.slnx` and then hit Build.
+Open `Oyabun.slnx` and then hit Build.
 
 
 
