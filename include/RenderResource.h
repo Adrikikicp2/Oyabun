@@ -12,6 +12,8 @@ using namespace Microsoft::WRL;
 namespace Oyabun
 {
 
+	class DescriptorManager; //forward decl.
+
 	//Add the missing ones (if any) later.
 	enum class ResourceTypes : uint8_t
 	{
@@ -118,6 +120,16 @@ namespace Oyabun
 		int elementCount = 0;
 	};
 
+#if OYABUN_USE_DIRECT3D
+	struct ResourceContext
+	{
+		ID3D12Device* device = nullptr;
+		IDXGIAdapter* adapter = nullptr;
+		DescriptorManager* descriptorMgr = nullptr;
+		D3D12MA::Allocator* allocator = nullptr;
+	};
+#endif
+
 	class RenderResource
 	{
 	public:
@@ -125,12 +137,8 @@ namespace Oyabun
 		RenderResource();
 		virtual ~RenderResource();
 #if OYABUN_USE_DIRECT3D
-		void FetchDevice(ID3D12Device* pDev) { m_device = pDev; }
-		void FetchAdapter(IDXGIAdapter* pAdapter) { m_adapter = pAdapter; }
-		void FetchCommandList(ID3D12CommandList* pCmdList) { m_cmdList = pCmdList; }
+		void FetchContext(ResourceContext* c) { m_pCtx = c; }
 #endif
-		bool Initialize();
-
 		bool Create(ResourceDesc* d);
 
 		bool Recreate(int newWidth, int newHeight, int newDepth);
@@ -139,21 +147,12 @@ namespace Oyabun
 
 	private:
 #if OYABUN_USE_DIRECT3D
-		ComPtr<ID3D12DescriptorHeap> m_pRTVHeap;
-		ComPtr<ID3D12DescriptorHeap> m_pDSVHeap;
-		ComPtr<ID3D12DescriptorHeap> m_pSRVHeap; //In reality, it also helps for cbuffers and UAVs, but we list SRV since a "m_pCBVSRVUAVHeap" is too long
-		// and can become sometimes tedious.
-
 		ComPtr<ID3D12Resource> m_pResource; //how many resources will we need? 
-
-		ID3D12Device* m_device = nullptr;
-		ID3D12CommandList* m_cmdList = nullptr;
-		IDXGIAdapter* m_adapter = nullptr;
-
-		ComPtr<D3D12MA::Allocator> m_pAllocator;
+		ResourceContext* m_pCtx;
 		ComPtr<D3D12MA::Allocation> m_pAllocation;
 
 		ResourceDesc* m_desc;
 #endif
+		bool CreateViews(); 
 	};
 }

@@ -103,13 +103,27 @@ namespace Oyabun
 
 		if (FAILED(hr)) return false;
 
+		//Create the D3D12MA allocator here.
+
+		D3D12MA::ALLOCATOR_DESC ac = {};
+		ac.Flags = D3D12MA::ALLOCATOR_FLAG_NONE;
+		ac.pAdapter = m_pAdapter.Get();
+		ac.pDevice = m_pDevice.Get();
+		HRESULT hr = D3D12MA::CreateAllocator(&ac, &m_pAllocator);
+
 		return true;
+	}
+
+	void RenderDevice::WaitForGPU()
+	{
+
 	}
 
 	void RenderDevice::Shutdown()
 	{
 		WaitForGPU();
 
+		if (m_pAllocator) m_pAllocator.Reset();
 		if (m_pSwapChain) m_pSwapChain.Reset();
 		if (m_pCmdQueue) m_pCmdQueue.Reset();
 		if (m_pDevice) m_pDevice.Reset();
